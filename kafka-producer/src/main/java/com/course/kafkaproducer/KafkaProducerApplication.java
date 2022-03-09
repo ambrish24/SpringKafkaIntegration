@@ -1,5 +1,7 @@
 package com.course.kafkaproducer;
 
+import com.course.kafkaproducer.entity.Employee;
+import com.course.kafkaproducer.producer.EmployeeJsonProducer;
 import com.course.kafkaproducer.producer.KafkaKeyProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -9,7 +11,30 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.course.kafkaproducer.producer.HelloKafkaProducer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import java.time.LocalDate;
+
 @SpringBootApplication
+public class KafkaProducerApplication implements CommandLineRunner {
+
+	@Autowired
+	private EmployeeJsonProducer employeeJsonProducer;
+
+	public static void main(String[] args) {
+		SpringApplication.run(KafkaProducerApplication.class, args);
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+
+		for(int i=0; i<5; i++ ){
+			var employee = new Employee("emp-" + i, "Employee "+i, LocalDate.now());
+			employeeJsonProducer.sendMessage(employee);
+		}
+	}
+
+}
+
+/*@SpringBootApplication
 public class KafkaProducerApplication implements CommandLineRunner {
 
 	@Autowired
@@ -29,7 +54,7 @@ public class KafkaProducerApplication implements CommandLineRunner {
 		}
 	}
 
-}
+}*/
 
 /*@SpringBootApplication
 @EnableScheduling
